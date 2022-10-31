@@ -14,14 +14,14 @@ public class DB {
 	private static Connection conn = null;
 
 	public static Connection getConnection() {
-		if (conn == null) { // se a conexão com o banco de dados for nula, usaremos o método debaixo para
-							// pegar os dados do banco
+		if (conn == null) {
+							
 			try {
 				Properties props = loadProperties();
-				String url = props.getProperty("dburl"); // aqui pegamos o dado "dburl", porque é assim que está
-															// definido no arquivo
-				conn = DriverManager.getConnection(url, props); // aqui conectamos com o banco de dados manualmente, com
-																// a url e as outras informações
+				String url = props.getProperty("dburl");
+															
+				conn = DriverManager.getConnection(url, props);
+																
 			} catch (SQLException e) {
 				throw new DbException(e.getMessage());
 			}
