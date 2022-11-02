@@ -47,16 +47,8 @@ public class SellerDaoJDBC implements SellerDao{
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setDepartment(dep); // aq estamos associando o department com o vendedor, como está na classe seller
+				Department dep = instantiateDepartment(rs);
+				Seller obj = instantiateSeller(rs, dep);
 				return obj;
 			}
 			return null;
@@ -67,6 +59,27 @@ public class SellerDaoJDBC implements SellerDao{
 			DB.closeResultSet(rs);
 			// não precisa fechar a conexão, porque depois de usar esse método você pode usar outros
 		}
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException { // método para instanciar um seller
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setDepartment(dep); // aq estamos associando o department com o vendedor, como está na classe seller
+		return obj;
+	}
+
+	// aqui estamos propagando a exceção porque já tratamos ela lá em cima na chamada do método
+			
+	private Department instantiateDepartment(ResultSet rs) throws SQLException { 
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
+		// método para instanciar um department
 	}
 
 	@Override
